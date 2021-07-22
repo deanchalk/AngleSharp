@@ -43,7 +43,10 @@ namespace AngleSharp
         /// <returns>The task that creates the document.</returns>
         public static Task<IDocument> OpenAsync(this IBrowsingContext context, IResponse response, CancellationToken cancel = default)
         {
-            response = response ?? throw new ArgumentNullException(nameof(response));
+            if (response?.Content == null)
+            {
+                throw new ArgumentNullException(nameof(response));
+            }
             context ??= BrowsingContext.New();
             var encoding = context.GetDefaultEncoding();
             var factory = context.GetFactory<IDocumentFactory>();
